@@ -4,6 +4,23 @@ from markupsafe import escape
 app = Flask(__name__)
 
 # ==========================================
+# 首頁選單 (避免進入主網址時出現 404)
+# ==========================================
+@app.route('/')
+def main_page():
+    return '''
+    <h1>Flask 作業目錄</h1>
+    <ul>
+        <li><a href="/ex43">Exercise 43 (Index)</a></li>
+        <li><a href="/ex44">Exercise 44 (Hello)</a></li>
+        <li><a href="/user/Kevin">Exercise 45 (URL Info)</a></li>
+        <li><a href="/home">Exercise 46 (Load HTML)</a></li>
+        <li><a href="/ex47">Exercise 47 (Variables)</a></li>
+        <li><a href="/ex48">Exercise 48 (Double)</a></li>
+    </ul>
+    '''
+
+# ==========================================
 # Exercise 43: Flask Online / Index Page
 # 路由: /ex43
 # ==========================================
@@ -25,7 +42,6 @@ def hello():
 # ==========================================
 @app.route('/user/<username>')
 def show_user_profile(username):
-    # 根據簡報，這裡會顯示 URL 擷取到的變數 [cite: 224]
     return f'User {escape(username)}'
 
 # ==========================================
@@ -34,7 +50,6 @@ def show_user_profile(username):
 # ==========================================
 @app.route('/home')
 def home():
-    # 載入 templates 資料夾中的 home.html [cite: 341]
     return render_template('home.html')
 
 # ==========================================
@@ -43,13 +58,11 @@ def home():
 # ==========================================
 @app.route('/ex47')
 def show_variables():
-    # 建立一個 Python 字典物件 [cite: 871]
     x = {
         "name": "John",
         "age": 30,
         "city": "New York"
     }
-    # 將變數傳遞給 HTML 模板
     return render_template('ex47.html', data=x)
 
 # ==========================================
@@ -60,7 +73,6 @@ def show_variables():
 def predict():
     result = None
     if request.method == 'POST':
-        # 接收表單傳來的 'x' 並轉為整數，然後乘以 2 [cite: 888, 889]
         x_val = int(request.form["x"])
         result = x_val * 2
     return render_template("double.html", result=result)
